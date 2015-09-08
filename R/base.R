@@ -139,6 +139,10 @@ cipres_submit_beast1 <- function(input_file,
     ## doesn't specify something impossible (e.g., data not
     ## partitioned but specify number of partitions).
 
+    ## provide option to validate request before submitting
+
+    ## provide option to give an ID to a job
+
     beast_version <- match.arg(beast_version)
     beast_version <- switch(beast_version,
                           "1.8.0" = "0",
@@ -168,8 +172,10 @@ cipres_submit_beast1 <- function(input_file,
     if (!is.numeric(n_partitions))
         stop(sQuote("n_partitions"), " should be a numeric.")
 
+    infile <- httr::upload_file(input_file)
+
     bdy <- list(
-        `input.infile_` = I(paste0("@", input_file)),
+        `input.infile_` = infile,
         `vparam.which_beast_` = beast_version,
         `vparam.no_beagle_` = no_beagle,
         `vparam.runtime_` = max_runtime,
