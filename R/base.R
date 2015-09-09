@@ -91,6 +91,14 @@ cipres_submit_job <- function(tool = "RAXMLHPC8_REST_XSEDE",
     httr::content(res)
 }
 
+cipres_results <- function(res) {
+    if (identical(res[["headers"]][["content-type"]], "application/xml")) {
+        return(xml2::read_xml(httr::content(res, as = "text")))
+    } else {
+        return(httr::content(res, as = "text"))
+    }
+}
+
 cipres_POST <- function(body, ...) {
     res <- httr::POST(url = paste(base_url, "job", cipres_login()$user, sep = "/"),
                       httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
@@ -99,7 +107,7 @@ cipres_POST <- function(body, ...) {
                       encode = "multipart",
                       ...)
     cipres_check(res)
-    httr::content(res)
+    cipres_results(res)
 }
 
 cipres_GET <- function(path, ...) {
@@ -109,7 +117,7 @@ cipres_GET <- function(path, ...) {
                        httr::authenticate(user = cipres_login()$user, password = cipres_login()$password))
                      )
     cipres_check(res)
-    httr::content(res)
+    cipres_results(res)
 }
 
 
@@ -215,10 +223,30 @@ cipres_submit_beast1 <- function(input_file,
 
 
 cipres_list_files <- function(job_handle, ...) {
-    cipres_GET(path = paste(job_handle, "output", sep = "/"))
+    res <- cipres_GET(path = paste(job_handle, "output", sep = "/"))
+
+    what <- c("outputDocumentId", "filename", "length")
+    res_lst <- lapply(what, function(x) {
+                          xml2::xml_text(xml2::xml_find_all(res, paste0(".//", x)))
+                      })
+
+    res <- data.frame(res_lst, stringsAsFactors = FALSE)
+    names(res) <- what
+    res
 }
 
 cipres_download_file <- function(job_handle, file_id, outfile, ...) {
     res <- cipres_GET(path = paste(job_handle, "output", file_id, sep = "/"), ...)
     cat(res, file = outfile)
 }
+
+cipres_download_all <- function(job_handle, outdir, ...) {
+    lst_files <- cipres_list_files(job_handle = job_handle, ...)
+    apply(lst_files, 1, function(x) {
+              cipres_download_file(job_handle = job_handle,
+                                   file_id = x["outputDocumentId"],
+                                   outfile = file.path(outdir, x["filename"]),
+                                   ...)
+          })
+}
+
