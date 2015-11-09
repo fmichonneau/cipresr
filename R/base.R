@@ -132,6 +132,9 @@ cipres_GET <- function(path, ...) {
 ### https://www.phylo.org/restusers/docs/guide.html
 
 
+check_file <- function(file) {
+    if (!is.null(file) && !file.exists(file))
+        stop(sQuote(file), " doesn't exist.")
 }
 
 
