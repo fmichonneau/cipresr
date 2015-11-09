@@ -9,5 +9,6 @@ Description: CIPRES is a popular platform that provides supercomputer access to
 Depends: R (>= 3.2.2)
 License: MIT + file LICENSE
 LazyData: true
-Imports: httr (>= 1.0.0)
+Imports: httr (>= 1.0.0),
+	 assertthat (>= 0.1)
 Suggests: testthat
