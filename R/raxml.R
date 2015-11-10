@@ -32,6 +32,7 @@ cipres_submit_raxml <- function(input_file,
                                 seed_value = 12345,
                                 n_bootstrap_rep = NULL,
                                 bootstop_type = c("autoMRE", "autoFC", "autoMR", "autoMRE_IGN"),
+                                get_email = TRUE,
                                 ...
                                 ) {
 
@@ -131,8 +132,21 @@ cipres_submit_raxml <- function(input_file,
         }
 
     }
+
+    ## partition file
+    if (!is.null(partition)) {
+        bdy$`input.partition_` <- httr::upload_file(partition)
+    }
+
     bdy <- lapply(bdy, as.character)
     bdy$`tool` <- "RAXMLHPC8_REST_XSEDE"
+
+    if (get_email) {
+        bdy$`metadata.statusEmail` <- "true"
+    } else {
+        bdy$`metadata.statusEmail` <- "false"
+    }
+
     cipres_POST(body = bdy, ...)
 }
 
