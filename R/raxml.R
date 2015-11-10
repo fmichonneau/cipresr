@@ -39,6 +39,7 @@ cipres_submit_raxml <- function(input_file,
 
     check_file(input_file)
     check_file(starting_tree)
+
     check_file(constraint)
     check_file(binary_backbone)
     check_file(partition)
@@ -98,7 +99,12 @@ cipres_submit_raxml <- function(input_file,
         bdy$`vparam.datatype_` <- "dna"
         bdy$`vparam.dna_gtrcat_` <- model
     } else if (identical(datatype, "protein")) {
+        ## custom protein matrices not yet implemented
         model <- match.arg(model, c("PROTGAMMA", "PROTCAT"))
+        protein_matrix <- match.arg(protein_matrix)
+        bdy$`vparam.datatype_` <- "protein"
+        bdy$`vparam.prot_sub_model_` <- model
+        bdy$`vparam.prot_matrix_spec_` <- protein_matrix
     } else if (identical(datatype, "rna")) {
         model <- match.arg(model, c("S6A", "S6B", "S6C", "S6D", "S6E",
                                     "S7A", "S7B", "S7C", "S7D", "S7E",
