@@ -103,7 +103,8 @@ cipres_results <- function(res) {
 cipres_POST <- function(body, ...) {
     res <- httr::POST(url = paste(base_url, "job", cipres_login()$user, sep = "/"),
                       httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
-                      c(httr::verbose(), httr::authenticate(user = cipres_login()$user, password = cipres_login()$password)),
+                      c(#httr::verbose(),
+                        httr::authenticate(user = cipres_login()$user, password = cipres_login()$password)),
                       body = body,
                       encode = "multipart",
                       ...)
@@ -114,7 +115,7 @@ cipres_POST <- function(body, ...) {
 cipres_GET <- function(path, ...) {
     res <- httr::GET(url = paste(base_url, "job", cipres_login()$user, path, sep = "/"),
                      httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
-                     c(httr::verbose(),
+                     c(#httr::verbose(),
                        httr::authenticate(user = cipres_login()$user, password = cipres_login()$password))
                      )
     cipres_check(res)
