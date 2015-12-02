@@ -68,6 +68,7 @@ cipres_list_jobs <- function() {
 ##' @author Francois Michonneau
 ##' @param tool The tool to use to analyze the data
 ##' @param input_file The input file to use with the selected tool
+##' @param params
 ##' @export
 ##' @importFrom httr POST
 ##' @importFrom httr add_headers
