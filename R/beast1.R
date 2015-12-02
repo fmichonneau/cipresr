@@ -25,10 +25,8 @@ cipres_submit_beast1 <- function(input_file,
                           "1.8.2" = "2"
                           )
 
-    if (!file.exists(input_file))
-        stop(sQuote(input_file), " doesn't exist.")
-    else
-        input_file <- normalizePath(input_file)
+    input_file <- normalizePath(input_file)
+    check_file(input_file)
 
     if (!is.logical(use_beagle))
         stop(sQuote("use_beagle"), " should be a logical.")
