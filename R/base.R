@@ -133,6 +133,40 @@ cipres_GET <- function(path, ...) {
 
 ### https://www.phylo.org/restusers/docs/guide.html
 
+## apparently the latest jobs submitted are listed last
+cipres_list_jobs <- function() {
+    res <- cipres_GET(path = "")
+    titles <- xml_text(xml_find_all(res, ".//jobs/jobstatus/selfUri/title"))
+    urls   <- xml_text(xml_find_all(res, ".//jobs/jobstatus/selfUri/url"))
+    data.frame(`title` = titles, `url` = urls, stringsAsFactors = FALSE)
+}
+
+
+##' @param which_job job number: 0 last submitted job, -1 before last
+##'     submitted job, 1 first ever submitted job
+cipres_job_status <- function(list_jobs = cipres_list_jobs(),
+                              which_job = 0, job_by_order = TRUE) {
+    if (job_by_order) {
+        if (which_job <=  0)
+            which_job <- nrow(list_jobs) + which_job
+    }
+    res <- httr::GET(url = list_jobs[["url"]][which_job],
+                     httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
+                     c(httr::authenticate(user = cipres_login()$user, password = cipres_login()$password))
+                     )
+    cipres_check(res)
+    res <- cipres_results(res)
+    handle <- xml_text(xml_find_all(res, ".//jobHandle"))
+    stage <- xml_text(xml_find_all(res, ".//jobStage"))
+    failed <- xml_text(xml_find_all(res, ".//failed"))
+    date_submitted <- xml_text(xml_find_all(res, ".//dateSubmitted"))
+    list(handle = handle,
+         stage = stage,
+         failed = failed,
+         date_submitted = date_submitted)
+}
+
+
 
 check_file <- function(file) {
     if (!is.null(file) && !file.exists(file))
