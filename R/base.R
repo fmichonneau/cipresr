@@ -122,12 +122,24 @@ cipres_GET <- function(path, ...) {
     cipres_results(res)
 }
 
+cipres_DELETE <- function(path, ...) {
+    res <- httr::DELETE(url = paste(base_url, "job", cipres_login()$user, path, sep = "/"),
+                        httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
+                        c(#httr::verbose(),
+                            httr::authenticate(user = cipres_login()$user, password = cipres_login()$password))
+                        )
+    cipres_check(res)
+    cipres_results(res)
+}
 
 ### https://www.phylo.org/restusers/docs/qs.html
 
-## cipres_cancel_job <- function()
-
-## cipres_job_status <- function()
+cipres_delete_job <- function(handle, ...) {
+    res <- cipres_DELETE(path = handle, ...)
+    if(identical(res, ""))
+        message("Success")
+    else warning("Something probably went wrong.")
+}
 
 ## cipres_job_results <- function()
 
