@@ -1,29 +1,11 @@
 
-base_url <- "https://cipresrest.sdsc.edu/cipresrest/v1"
+cipres_version <- "v1"
+base_url <- paste("https://cipresrest.sdsc.edu/cipresrest", "v1", sep = "/")
+APPNAME <- "cipresr"
+APPAUTHOR <- "fmichonneau"
 
 ##' Easy programmatic access to the login information. This function
 ##' shouldn't be used by normal users and is only intended to be
-##' called by other functions.
-##'
-##' You need to create the environment variables \code{CIPRES_USER},
-##' \code{CIPRES_PWD}, \code{CIPRES_APP_ID} in your .Renviron file
-##' after registering for an account at
-##' \url{https://www.phylo.org/restusers/login.action}. Therefore, you
-##' will need to enter your login information only once.
-##'
-##' @title Access login information for the CIPRES API
-##' @param user Your CIPRES API user name
-##' @param password Your CIPRES API password
-##' @param app_id Your CIPRES API application token
-##' @return A list
-##' @author Francois Michonneau
-##' @export
-cipres_login <- function(user = Sys.getenv("CIPRES_USER"),
-                         password = Sys.getenv("CIPRES_PWD"),
-                         app_id = Sys.getenv("CIPRES_APP_ID")) {
-
-    list(user = user, password = password, app_id = app_id)
-}
 
 cipres_check <- function(res) {
     if (res$status_code < 400)

@@ -10,5 +10,7 @@ Depends: R (>= 3.2.2)
 License: MIT + file LICENSE
 LazyData: true
 Imports: httr (>= 1.0.0),
-	 assertthat (>= 0.1)
+	 assertthat (>= 0.1),
+	 storr (>= 0.5.0),
+	 rappdirs (>= 0.3)
 Suggests: testthat
