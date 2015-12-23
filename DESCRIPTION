@@ -4,13 +4,17 @@ Version: 0.0.0.9000
 Authors@R: person("Francois", "Michonneau", role=c("aut", "cre"),
                                 email="francois.michonneau@gmail.com")
 Description: CIPRES is a popular platform that provides supercomputer access to
-  scientists interested in running phylogenetics analysis. cipresr allows users
-  to submit jobs to CIPRES directly from R.
-Depends: R (>= 3.2.2)
+    scientists interested in running phylogenetics analysis. cipresr allows users to
+    submit jobs to CIPRES directly from R.
+Depends:
+    R (>= 3.2.2)
 License: MIT + file LICENSE
 LazyData: true
-Imports: httr (>= 1.0.0),
-	 assertthat (>= 0.1),
-	 storr (>= 0.5.0),
-	 rappdirs (>= 0.3)
-Suggests: testthat
+Imports:
+    httr (>= 1.0.0),
+    assertthat (>= 0.1),
+    storr (>= 0.5.0),
+    rappdirs (>= 0.3)
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
