@@ -42,15 +42,7 @@ cipres_job_status <- function(handle, ...) {
     }
 
     res <- cipres_GET(full_url = lst_jobs[["url"]][i_job], ...)
-
-    handle <- xml2::xml_text(xml2::xml_find_all(res, ".//jobHandle"))
-    stage <- xml2::xml_text(xml2::xml_find_all(res, ".//jobStage"))
-    failed <- xml2::xml_text(xml2::xml_find_all(res, ".//failed"))
-    date_submitted <- xml2::xml_text(xml2::xml_find_all(res, ".//dateSubmitted"))
-    list(handle = handle,
-         stage = stage,
-         failed = failed,
-         date_submitted = date_submitted)
+    cipres_process_results(res)
 }
 
 

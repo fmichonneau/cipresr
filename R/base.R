@@ -74,3 +74,23 @@ check_file <- function(file) {
     if (!is.null(file) && !file.exists(file))
         stop(sQuote(file), " doesn't exist.")
 }
+
+cipres_process_results <- function(res) {
+    handle <- xml2::xml_text(xml2::xml_find_all(res, ".//jobHandle"))
+    stage <- xml2::xml_text(xml2::xml_find_all(res, ".//jobStage"))
+    failed <- xml2::xml_text(xml2::xml_find_all(res, ".//failed"))
+    date_submitted <- xml2::xml_text(xml2::xml_find_all(res, ".//dateSubmitted"))
+    list(handle = handle,
+         stage = stage,
+         failed = failed,
+         date_submitted = date_submitted)
+}
+
+add_meta_data <- function(bdy, get_email) {
+    if (get_email) {
+        bdy$`metadata.statusEmail` <- "true"
+    } else {
+        bdy$`metadata.statusEmail` <- "false"
+    }
+    bdy
+}

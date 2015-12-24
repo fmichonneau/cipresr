@@ -46,7 +46,7 @@ cipres_submit_raxml <- function(input_file,
                                                    "GTR_UNLINKED",
                                                    "GTR"),
                                 bootstrap_type = c("b", "x"),
-                                seed_value = 12345,
+                                bs_seed_value = 12345,
                                 n_bootstrap_rep = NULL,
                                 bootstop_type = c("autoMRE", "autoFC", "autoMR", "autoMRE_IGN"),
                                 get_email = TRUE,
@@ -56,7 +56,6 @@ cipres_submit_raxml <- function(input_file,
 
     check_file(input_file)
     check_file(starting_tree)
-
     check_file(constraint)
     check_file(binary_backbone)
     check_file(partition)
@@ -145,7 +144,7 @@ cipres_submit_raxml <- function(input_file,
     bootstrap_type <- match.arg(bootstrap_type)
     if (select_analysis %in% c("fa", "fd", "fo")) {
         bdy$`vparam.choose_bootstrap_` <- bootstrap_type
-        bdy$`vparam.seed_value_` <- seed_value
+        bdy$`vparam.seed_value_` <- bs_seed_value
         if (is.null(n_bootstrap_rep)) {
             bdy$`vparam.choose_bootstop_` <- "bootstop"
             bdy$`vparam.bootstopping_type_` <- match.arg(bootstop_type)
@@ -161,30 +160,12 @@ cipres_submit_raxml <- function(input_file,
         bdy$`input.partition_` <- httr::upload_file(partition)
     }
 
+    bdy <- add_meta_data(bdy, get_email)
+
     bdy <- lapply(bdy, as.character)
+
     bdy$`tool` <- "RAXMLHPC8_REST_XSEDE"
 
-    if (get_email) {
-        bdy$`metadata.statusEmail` <- "true"
-    } else {
-        bdy$`metadata.statusEmail` <- "false"
-    }
-
-    cipres_POST(body = bdy, ...)
-}
-
-if (FALSE) {
-    chopper::fas2phy("~/Documents/Diademnidae/original_fromAndrea/20151109-sequences/20151109-COI.afa")
-
-    cipres_submit_raxml(
-        "~/Documents/Diademnidae/original_fromAndrea/20151109-sequences/20151109-COI.phy",
-        "fa",
-        datatype = "dna",
-        model = "GTRGAMMA",
-        parsimony_seed = "10101",
-        bootstrap_type = "x",
-        n_runs = "20",
-        n_bootstrap_rep = "100",
-        seed_value = "10101",
-    )
+    res <- cipres_POST(body = bdy, ...)
+    cipres_process_results(res)
 }
