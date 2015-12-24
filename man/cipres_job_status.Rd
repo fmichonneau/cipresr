@@ -16,6 +16,16 @@ A list containing the job handle, the job status
     (\code{stage}), whether the job failed, and the job data
     submission.
 }
+\description{
+Check the status of a job.
+}
+\examples{
+\dontrun{
+  ## Status of the latest job submitted
+  lst_jobs <- cipres_list_jobs()
+  cipres_job_status(lst_jobs$handle[nrow(lst_jobs)])
+}
+}
 \author{
 Francois Michonneau
 }

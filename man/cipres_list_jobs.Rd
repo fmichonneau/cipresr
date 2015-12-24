@@ -12,6 +12,9 @@ cipres_list_jobs(...)
 \value{
 A data frame with the job handle and its URL
 }
+\description{
+List past and running jobs on the CIPRES server.
+}
 \seealso{
 Other job.controls: \code{\link{cipres_delete_job}},
   \code{\link{cipres_job_status}}

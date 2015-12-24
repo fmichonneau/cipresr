@@ -1,3 +1,5 @@
+##' List past and running jobs on the CIPRES server.
+##'
 ##' @title List past and current jobs on the CIPRES server
 ##' @return A data frame with the job handle and its URL
 ##' @family job controls
@@ -12,7 +14,8 @@ cipres_list_jobs <- function(...) {
 }
 
 
-
+##' Check the status of a job.
+##'
 ##' @title Job status
 ##' @param handle The job identifier
 ##' @template dotdotdot

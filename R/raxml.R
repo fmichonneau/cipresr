@@ -1,3 +1,103 @@
+##' Submit to CIPRES an RAxML job. For more information, please
+##' consult the RAxML manual available on the RAxML website
+##' (\url{http://sco.h-its.org/exelixis/web/software/raxml}).
+##'
+##' CIPRES offers several flavors of RAxML but \code{cipresr} only
+##' provides an interface with the full RAxML version. Setting the
+##' correct options for a given run can be challenging as RAxML is
+##' complex and feature-rich software. Read the RAxML manual
+##' carefully, double check for potential warnings and error messages
+##' in the output files, and your results.
+##'
+##' @title Submit RAxML analysis
+##' @param input_file An alignment file in relaxed interleaved for
+##'     sequential PHYLIP (or FASTA) format (-s)
+##' @param select_analysis The type of analysis to be performed.
+##' @param starting_tree A NEWICK tree file specifying the starting
+##'     tree. If \code{NULL} (default), RAxML uses a randomized
+##'     stepwise addition Parsimony starting tree.
+##' @param constraint A NEWICK tree file specifying topology
+##'     constraining the tree search. If \code{NULL} (default), no
+##'     constraint is used.
+##' @param binary_backbone The file name of a binary constraint
+##'     tree. If \code{NULL} (default), no constraint is used.
+##' @param partition A file specifying the partitions in the alignment
+##'     file using the RAxML format (refer to the RAxML manual for
+##'     details). If \code{NULL} (default), the full alignment is
+##'     considered as a single partition.
+##' @param exclude A file specifying positions in the alignment to
+##'     exclude. If \code{NULL} (default), no position is excluded.
+##' @param weights A file indicating the weights for each column
+##'     position in the alignment. If \code{NULL} (default), all
+##'     alignments positions have identical weights.
+##' @param user_prot_matrix A file containing an amino-acid
+##'     substitution model.
+##' @param secondary_structure A file specifying a secondary structure
+##'     model for the alignment.
+##' @param bootstrap_topologies A file containing topologies for a
+##'     posteriori bootstrapping.
+##' @template max_runtime
+##' @param CAT_categories When using a CAT model, how many rate
+##'     categories (-c)?
+##' @param parsimony_seed For all options that use randomization, this
+##'     seed must be specified (-p).
+##' @param datatype The type of data used in the alignment.
+##' @param outgroups Specify in name of a single outgroup
+##'     (\dQuote{Cat}) or a comma-separated list of outgroups (no
+##'     spaces: \dQuote{Cat,Dog,Bird}). If several species are listed
+##'     as outgroup, only the first one in the list will be used a
+##'     outgroup.
+##' @param p_inv Should a proportion of invariant site be estimated?
+##'     (default \code{FALSE}).
+##' @param empirical_freq Should empirical frequencies be used with
+##'     amino-acid alignments? (default \code{FALSE}).
+##' @param print_brlen Should branch lengths be printed on the screen?
+##'     Default \code{FALSE}.
+##' @param more_memory Set to \code{TRUE} if your analysis requires
+##'     more than 125GB of memory.
+##' @param n_char If using \code{more_memory}, set to the number of
+##'     characters in your alignment to estimate the amount of memory
+##'     needed.
+##' @param n_tax If using \code{more_memory}, set to the number of
+##'     taxa in your alignment to estimate the amount of memory
+##'     needed.
+##' @param disable_check_sequence Disable checking for completely
+##'     undetermined sequences (it normally doesn't make sense to
+##'     incude them in the analysis). Default
+##'     \code{FALSE}. (\code{-O}).
+##' @param mesquite_output Generate output files that can be parsed by
+##'     MESQUITE. Default \code{FALSE}. (Not allowed by CIPRES in runs
+##'     with bootstrapping or alternative runs are used)
+##'     (\code{-mesquite}).
+##' @param model The substitution model (\code{-m}).
+##' @param n_runs The number of alternative runs on distinct starting
+##'     trees (\code{-#} or \code{-N}).
+##' @param no_bfgs If \code{TRUE}, disable the BFGS method when
+##'     optimizing the GTR rates (default \code{FALSE}).
+##' @param intermediate_tree_files If \code{TRUE}, the intermediate
+##'     tree will be written to files (\code{-j}).
+##' @param convergence_criterion ML search convergence criterion uses
+##'     Robinson-Foulds distance. Default \code{FALSE}. Use on trees
+##'     with large number of taxa (\code{-D}).
+##' @param majority_rule When computing the majority rule consensus
+##'     tree (\code{select_analysis="J"}), which method to use?
+##' @param protein_matrix Which amino-acid substitution matrix to use
+##'     when working with protein sequence alignment?
+##' @param bootstrap_type Which type of bootstrapping algorithm to use
+##'     (with \code{select_analysis} is \code{fa}, \code{fd}, or
+##'     \code{fo})? \code{x} for rapid bootstrapping and \code{b} for
+##'     normal bootstrapping.
+##' @param bs_seed_value The seed to use for the bootstrapping.
+##' @param n_bootstrap_rep If \code{NULL}, the number of bootstrap
+##'     replicate will be selected by RAxML according to the algorithm
+##'     specified by the option \code{bootstop_type}. Other an integer
+##'     specifiying the number of replicates.
+##' @param bootstop_type The type of algorithm used to estimate the
+##'     number of replicates.
+##' @template get_email
+##' @template dotdotdot
+##' @author Francois Michonneau
+##' @export
 cipres_submit_raxml <- function(input_file,
                                 select_analysis = c("fa", "fd", "fo", "fA", "J", "y", "I"),
                                 starting_tree = NULL,
