@@ -54,7 +54,8 @@ cipres_GET <- function(path, full_url, ...) {
     res <- httr::GET(url = url,
                      httr::add_headers(`cipres-appkey` = cipres_login()$app_id),
                      c(httr::authenticate(user = cipres_login()$user,
-                                          password = cipres_login()$password)))
+                                          password = cipres_login()$password)),
+                     ...)
     cipres_results(res)
 }
 
