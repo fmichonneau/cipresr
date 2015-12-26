@@ -81,17 +81,25 @@ cipres_process_results <- function(res) {
     stage <- xml2::xml_text(xml2::xml_find_all(res, ".//jobStage"))
     failed <- xml2::xml_text(xml2::xml_find_all(res, ".//failed"))
     date_submitted <- xml2::xml_text(xml2::xml_find_all(res, ".//dateSubmitted"))
+    job_name <- xml2::xml_text(xml2::xml_find_all(res, ".//clientJobName"))
     list(handle = handle,
+         job_name = job_name,
          stage = stage,
          failed = failed,
          date_submitted = date_submitted)
 }
 
-add_meta_data <- function(bdy, get_email) {
+add_meta_data <- function(bdy, get_email, job_name, job_id) {
     if (get_email) {
         bdy$`metadata.statusEmail` <- "true"
     } else {
         bdy$`metadata.statusEmail` <- "false"
     }
+
+    if (!is.null(job_name)) {
+        assertthat::assert_that(assertthat::is.string(job_name))
+        bdy$`metadata.clientJobName` <- job_name
+    }
+
     bdy
 }

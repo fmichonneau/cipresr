@@ -11,6 +11,7 @@ cipres_submit_beast1 <- function(input_file,
                                  n_patterns,
                                  codon_partitioning = FALSE,
                                  use_seed = NULL,
+                                 job_name = NULL,
                                  get_email = TRUE, ...) {
 
     ## Documentation here: http://www.phylo.org/rest/beast_tg.html
@@ -45,7 +46,7 @@ cipres_submit_beast1 <- function(input_file,
 
     bdy <- beast_check_partitions(bdy, n_partitions)
     bdy <- beast_use_seed(bdy, use_seed)
-    bdy <- add_meta_data(bdy, get_email)
+    bdy <- add_meta_data(bdy, get_email, job_name)
 
     bdy <- lapply(bdy, as.character)
     bdy$tool <- "BEAST_TG"

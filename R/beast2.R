@@ -21,6 +21,7 @@
 ##' @param overwrite_logs Should existing log files on the server be
 ##'     overwritten?
 ##' @template get_email
+##' @template job_name
 ##' @template dotdotdot
 ##' @importFrom assertthat assert_that is.count is.flag
 ##' @importFrom httr upload_file
@@ -34,6 +35,7 @@ cipres_submit_beast2 <- function(input_file,
                                  n_partitions = 0,
                                  use_seed = NULL,
                                  overwrite_logs = TRUE,
+                                 job_name = NULL,
                                  get_email = TRUE, ...) {
 
 
@@ -64,7 +66,7 @@ cipres_submit_beast2 <- function(input_file,
 
     bdy <- beast_check_partitions(bdy, n_partitions)
     bdy <- beast_use_seed(bdy, use_seed)
-    bdy <- add_meta_data(bdy, get_email)
+    bdy <- add_meta_data(bdy, get_email, job_name)
 
     bdy <- lapply(bdy, as.character)
     bdy$"tool" <- "BEAST2_XSEDE"

@@ -94,6 +94,7 @@
 ##'     specifiying the number of replicates.
 ##' @param bootstop_type The type of algorithm used to estimate the
 ##'     number of replicates.
+##' @template job_name
 ##' @template get_email
 ##' @template dotdotdot
 ##' @author Francois Michonneau
@@ -149,6 +150,7 @@ cipres_submit_raxml <- function(input_file,
                                 bs_seed_value = 12345,
                                 n_bootstrap_rep = NULL,
                                 bootstop_type = c("autoMRE", "autoFC", "autoMR", "autoMRE_IGN"),
+                                job_name = NULL,
                                 get_email = TRUE,
                                 ...
                                 ) {
@@ -260,7 +262,7 @@ cipres_submit_raxml <- function(input_file,
         bdy$`input.partition_` <- httr::upload_file(partition)
     }
 
-    bdy <- add_meta_data(bdy, get_email)
+    bdy <- add_meta_data(bdy, get_email, job_name)
 
     bdy <- lapply(bdy, as.character)
 
