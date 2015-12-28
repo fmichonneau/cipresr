@@ -50,7 +50,7 @@ done, using `cipresr`:
 
 ```r
 cipres_submit_beast2(input_file = "my_analysis.xml", n_patterns = 1000, n_partitions = 5)
-cipres_download_all("NGBW-JOB-BEAST2_XSEDE-66666666666666666666", "~/my_analysis_results/")
+cipres_download("NGBW-JOB-BEAST2_XSEDE-66666666666666666666", "~/my_analysis_results/")
 ```
 
 Don't hesitate to open an issue if you'd like to have access to a tool other
