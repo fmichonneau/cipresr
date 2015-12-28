@@ -104,7 +104,7 @@ cipres_setup <- function() {
         if (! interactive()) stop("Setup can only be run in interactive mode.")
         message("It looks like you haven't used ", sQuote("cipresr"), " before. \n\n")
 
-        cat(strwrap("First, you need to create an account with https://www.phylo.org/restusers/register.action"),
+        cat(strwrap("First, you need to create an account at https://www.phylo.org/restusers/register.action"),
             sep = "\n")
         cat("\n", strwrap(paste("**Note** that it is a different account from the one you might use with the CIPRES Portal!",
                           "The email address you will provide CIPRES will be the one where you receive notifications",
