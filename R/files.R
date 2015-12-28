@@ -73,12 +73,12 @@ cipres_download_file <- function(job_handle, file_id, file_name,
 ##' @template dotdotdot
 ##' @export
 ##' @rdname cipres_list_files
+##' @importFrom assertthat assert_that is.dir
 cipres_download <- function(job_handle, outdir, pattern = NULL,
                             ignore.case = FALSE, show_progress = TRUE,
                             ...) {
 
-    if (!file.exists(outdir))
-        stop(sQuote(outdir), " doesn't exist. Create it first.")
+    assertthat::assert_that(assertthat::is.dir(outdir))
 
     lst_files <- cipres_list_files(job_handle = job_handle, ...)
 
