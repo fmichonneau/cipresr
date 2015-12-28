@@ -89,6 +89,7 @@ cipres_process_results <- function(res) {
          date_submitted = date_submitted)
 }
 
+##' @importFrom assertthat assert_that is.string
 add_meta_data <- function(bdy, get_email, job_name, job_id) {
     if (get_email) {
         bdy$`metadata.statusEmail` <- "true"
