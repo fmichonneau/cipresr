@@ -22,6 +22,7 @@
 ##'     overwritten?
 ##' @template get_email
 ##' @template job_name
+##' @template note
 ##' @template dotdotdot
 ##' @importFrom assertthat assert_that is.count is.flag
 ##' @importFrom httr upload_file
@@ -36,7 +37,9 @@ cipres_submit_beast2 <- function(input_file,
                                  use_seed = NULL,
                                  overwrite_logs = TRUE,
                                  job_name = NULL,
-                                 get_email = TRUE, ...) {
+                                 get_email = TRUE,
+                                 note = NULL,
+                                 ...) {
 
 
     ## documentation: http://www.phylo.org/rest/beast2_xsede.html
@@ -72,5 +75,9 @@ cipres_submit_beast2 <- function(input_file,
     bdy$"tool" <- "BEAST2_XSEDE"
 
     res <- cipres_POST(body = bdy, ...)
-    cipres_process_results(res)
+    proc_res <- cipres_process_results(res)
+    cipres_create_note(proc_res$handle,
+                       list(body = bdy, job_name = job_name,
+                            note = note))
+    proc_res
 }

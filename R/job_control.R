@@ -10,7 +10,16 @@ cipres_list_jobs <- function(...) {
     res <- cipres_GET(path = "", ...)
     titles <- xml2::xml_text(xml2::xml_find_all(res, ".//jobs/jobstatus/selfUri/title"))
     urls   <- xml2::xml_text(xml2::xml_find_all(res, ".//jobs/jobstatus/selfUri/url"))
-    data.frame(`handle` = titles, `url` = urls, stringsAsFactors = FALSE)
+    in_notebook <- vapply(titles, cipres_in_notebook, logical(1))
+    job_name <- vapply(titles, cipres_get_notebook, character(1), "job_name")
+    has_note <- vapply(titles, function(x) {
+        !is.na(cipres_get_notebook(x, "note"))
+    }, logical(1))
+    data.frame(`handle` = titles,
+               `in_notebook` = in_notebook,
+               `job_name` = job_name,
+               `has_note` = has_note,
+               row.names = seq_along(titles))
 }
 
 
@@ -45,6 +54,7 @@ cipres_job_status <- function(handle, ...) {
     }
 
     res <- cipres_GET(full_url = lst_jobs[["url"]][i_job], ...)
+    browser()
     cipres_process_results(res)
 }
 
