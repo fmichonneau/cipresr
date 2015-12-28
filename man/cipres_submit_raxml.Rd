@@ -22,7 +22,7 @@ cipres_submit_raxml(input_file, select_analysis = c("fa", "fd", "fo", "fA",
   "PROT_FILE", "GTR_UNLINKED", "GTR"), bootstrap_type = c("b", "x"),
   bs_seed_value = 12345, n_bootstrap_rep = NULL,
   bootstop_type = c("autoMRE", "autoFC", "autoMR", "autoMRE_IGN"),
-  get_email = TRUE, ...)
+  job_name = NULL, get_email = TRUE, ...)
 }
 \arguments{
 \item{input_file}{An alignment file in relaxed interleaved for
@@ -143,6 +143,8 @@ specifiying the number of replicates.}
 
 \item{bootstop_type}{The type of algorithm used to estimate the
 number of replicates.}
+
+\item{job_name}{An optional name to identify the job.}
 
 \item{get_email}{Should an email be sent when the job completed?}
 
