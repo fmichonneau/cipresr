@@ -41,9 +41,6 @@ cipres_submit_beast2 <- function(input_file,
                                  note = NULL,
                                  ...) {
 
-
-    ## documentation: http://www.phylo.org/rest/beast2_xsede.html
-
     beast_version <- match.arg(beast_version)
     beast_version <- switch(beast_version,
                             "2.3.0" = "30",
@@ -51,12 +48,35 @@ cipres_submit_beast2 <- function(input_file,
 
     assertthat::assert_that(assertthat::is.count(max_runtime))
     assertthat::assert_that(assertthat::is.count(n_patterns))
-    assertthat::assert_that(assertthat::is.count(n_partitions))
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(overwrite_logs))
 
     input_file <- normalizePath(input_file)
     check_file(input_file)
+
+    bdy <- .cipres_submit_beast2(input_file = input_file, beast_version, max_runtime,
+                                 use_beagle, n_patterns, n_partitions, use_seed,
+                                 overwrite_logs, job_name, get_email, note, ...)
+
+    cipres_submit(bdy, tool = "BEAST2_XSEDE", ...)
+}
+
+## The list construction is separated from the submission part to
+## allow for writing unit tests.
+.cipres_submit_beast2 <- function(input_file,
+                                  beast_version,
+                                  max_runtime,
+                                  use_beagle,
+                                  n_patterns,
+                                  n_partitions,
+                                  use_seed,
+                                  overwrite_logs,
+                                  job_name,
+                                  get_email,
+                                  note,
+                                  ...) {
+
+    ## documentation: http://www.phylo.org/rest/beast2_xsede.html
 
     bdy <- list(
         `input.infile_` = httr::upload_file(input_file),
@@ -70,14 +90,5 @@ cipres_submit_beast2 <- function(input_file,
     bdy <- beast_check_partitions(bdy, n_partitions)
     bdy <- beast_use_seed(bdy, use_seed)
     bdy <- add_meta_data(bdy, get_email, job_name)
-
-    bdy <- lapply(bdy, as.character)
-    bdy$"tool" <- "BEAST2_XSEDE"
-
-    res <- cipres_POST(body = bdy, ...)
-    proc_res <- cipres_process_results(res)
-    cipres_create_note(proc_res$handle,
-                       list(body = bdy, job_name = job_name,
-                            note = note))
-    proc_res
+    bdy
 }

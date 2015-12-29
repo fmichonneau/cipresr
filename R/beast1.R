@@ -28,12 +28,9 @@ cipres_submit_beast1 <- function(input_file,
 
     assertthat::assert_that(assertthat::is.count(max_runtime))
     assertthat::assert_that(assertthat::is.count(n_patterns))
-    assertthat::assert_that(assertthat::is.count(n_partitions))
+
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(codon_partitioning))
-
-    if (codon_partitioning && n_partitions != 3)
-        stop(sQuote(codon_partitioning), " requires using 3 partitions.")
 
     bdy <- list(
         `input.infile_` = httr::upload_file(input_file),
@@ -55,6 +52,7 @@ cipres_submit_beast1 <- function(input_file,
 }
 
 beast_check_partitions <- function(bdy, n_partitions) {
+    assertthat::assert_that(assertthat::is.count(n_partitions))
     if (n_partitions > 1) {
         bdy$`vparam.is_partitioned_` <- "1"
         bdy$`vparam.nu_partitions_` <- n_partitions
