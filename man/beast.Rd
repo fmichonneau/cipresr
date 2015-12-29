@@ -11,7 +11,7 @@ cipres_submit_beast1(input_file, beast_version = c("1.8.2", "1.8.1", "1.8.0"),
   get_email = TRUE, ...)
 
 cipres_submit_beast2(input_file, beast_version = c("2.3.0", "2.1.3"),
-  max_runtime = 10, use_beagle = TRUE, n_patterns, n_partitions = 0,
+  max_runtime = 10, use_beagle = TRUE, n_patterns, n_partitions = 1,
   use_seed = NULL, overwrite_logs = TRUE, job_name = NULL,
   get_email = TRUE, note = NULL, ...)
 }
