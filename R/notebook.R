@@ -19,7 +19,8 @@ cipres_in_notebook <- function(handle, custom_path = FALSE) {
 
 cipres_get_notebook <- function(handle, what, custom_path = FALSE) {
     st <- cipres_notebook_store(custom_path)
-    if (cipres_in_notebook(handle, custom_path))
+    if (cipres_in_notebook(handle, custom_path) &&
+        exists("what", st$get(handle)))
         st$get(handle)[[what]]
     else
         NA_character_

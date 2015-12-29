@@ -15,7 +15,12 @@ cipres_list_jobs <- function(...) {
     has_note <- vapply(titles, function(x) {
         !is.na(cipres_get_notebook(x, "note"))
     }, logical(1))
+    date_submitted <- vapply(titles, function(x) {
+        dat <- cipres_get_notebook(x, "date_submitted")
+        format(as.Date(dat), "%Y-%m-%d")
+    }, character(1))
     data.frame(`handle` = titles,
+               `date_submitted` = date_submitted,
                `in_notebook` = in_notebook,
                `job_name` = job_name,
                `has_note` = has_note,
@@ -54,7 +59,6 @@ cipres_job_status <- function(handle, ...) {
     }
 
     res <- cipres_GET(full_url = lst_jobs[["url"]][i_job], ...)
-    browser()
     cipres_process_results(res)
 }
 
@@ -90,4 +94,19 @@ cipres_delete_job <- function(handle, verbose = TRUE, ...) {
         warning("Something probably went wrong.")
         return(invisible(FALSE))
     }
+}
+
+
+cipres_submit <- function(bdy, tool, ...) {
+    bdy <- lapply(bdy, as.character)
+    bdy$"tool" <- tool
+
+    res <- cipres_POST(body = bdy, ...)
+    proc_res <- cipres_process_results(res)
+    cipres_create_note(proc_res$handle,
+                       list(body = bdy,
+                            job_name = job_name,
+                            date_submitted = res$date_submitted,
+                            note = note))
+    proc_res
 }
