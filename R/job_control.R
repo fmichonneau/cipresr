@@ -97,7 +97,7 @@ cipres_delete_job <- function(handle, verbose = TRUE, ...) {
 }
 
 
-cipres_submit <- function(bdy, tool, ...) {
+cipres_submit <- function(bdy, tool, job_name, note, ...) {
     bdy <- lapply(bdy, as.character)
     bdy$"tool" <- tool
 

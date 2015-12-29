@@ -58,7 +58,8 @@ cipres_submit_beast2 <- function(input_file,
                                  use_beagle, n_patterns, n_partitions, use_seed,
                                  overwrite_logs, job_name, get_email, note, ...)
 
-    cipres_submit(bdy, tool = "BEAST2_XSEDE", ...)
+    cipres_submit(bdy, tool = "BEAST2_XSEDE", job_name = job_name,
+                  note = note, ...)
 }
 
 ## The list construction is separated from the submission part to
