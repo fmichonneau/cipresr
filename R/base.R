@@ -68,7 +68,6 @@ cipres_DELETE <- function(path, ...) {
     cipres_results(res)
 }
 
-### https://www.phylo.org/restusers/docs/qs.html
 
 
 check_file <- function(file) {
@@ -90,7 +89,8 @@ cipres_process_results <- function(res) {
 }
 
 ##' @importFrom assertthat assert_that is.string
-add_meta_data <- function(bdy, get_email, job_name, job_id) {
+add_meta_data <- function(bdy, get_email, job_name) {
+    assertthat::assert_that(assertthat::is.flag(get_email))
     if (get_email) {
         bdy$`metadata.statusEmail` <- "true"
     } else {
