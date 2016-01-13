@@ -88,7 +88,7 @@ cipres_submit_beast2 <- function(input_file,
         `vparam.overwrite_logs_` = as.numeric(overwrite_logs)
         )
 
-    bdy <- beast_check_partitions(bdy, n_partitions)
+    bdy <- beast_check_partitions(bdy, n_partitions, beast2 = TRUE)
     bdy <- beast_use_seed(bdy, use_seed)
     bdy <- add_meta_data(bdy, get_email, job_name)
     bdy

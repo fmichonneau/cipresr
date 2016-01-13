@@ -41,7 +41,7 @@ cipres_submit_beast1 <- function(input_file,
         `vparam.codon_partitioning_` = as.numeric(codon_partitioning)
     )
 
-    bdy <- beast_check_partitions(bdy, n_partitions)
+    bdy <- beast_check_partitions(bdy, n_partitions, beast2 = FALSE)
     bdy <- beast_use_seed(bdy, use_seed)
     bdy <- add_meta_data(bdy, get_email, job_name)
 
@@ -51,10 +51,10 @@ cipres_submit_beast1 <- function(input_file,
     cipres_process_results(res)
 }
 
-beast_check_partitions <- function(bdy, n_partitions) {
+beast_check_partitions <- function(bdy, n_partitions, beast2) {
     assertthat::assert_that(assertthat::is.count(n_partitions))
     if (n_partitions > 1) {
-        bdy$`vparam.is_partitioned_` <- "1"
+        if (beast2) { bdy$`vparam.is_partitioned_` <- "1" }
         bdy$`vparam.nu_partitions_` <- n_partitions
     } else {
         bdy$`vparam.is_partitioned_` <- "0"
