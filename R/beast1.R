@@ -7,8 +7,6 @@ cipres_submit_beast1 <- function(input_file,
                                  beast_version = c("1.8.2", "1.8.1", "1.8.0"),
                                  use_beagle = TRUE,
                                  max_runtime = 10,
-                                 n_partitions = 1,
-                                 n_patterns,
                                  codon_partitioning = FALSE,
                                  use_seed = NULL,
                                  job_name = NULL,
@@ -27,7 +25,6 @@ cipres_submit_beast1 <- function(input_file,
     check_file(input_file)
 
     assertthat::assert_that(assertthat::is.count(max_runtime))
-    assertthat::assert_that(assertthat::is.count(n_patterns))
 
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(codon_partitioning))
@@ -37,9 +34,15 @@ cipres_submit_beast1 <- function(input_file,
         `vparam.which_beast_` = beast_version,
         `vparam.no_beagle_` = as.numeric(!use_beagle), ## they use the opposite logic hence the negation
         `vparam.runtime_` = max_runtime,
-        `vparam.nu_patterns_` = n_patterns,
         `vparam.codon_partitioning_` = as.numeric(codon_partitioning)
     )
+
+    alg_info <- parse_beast1_xml(input_file)
+    n_patterns <- alg_info[["n_patterns"]]
+    assertthat::assert_that(assertthat::is.count(n_patterns))
+
+    bdy$`vparam.nu_patterns_` <- n_patterns
+    n_partitions <- alg_info[["n_partitions"]]
 
     bdy <- beast_check_partitions(bdy, n_partitions, beast2 = FALSE)
     bdy <- beast_use_seed(bdy, use_seed)
@@ -71,4 +74,25 @@ beast_use_seed <- function(bdy, use_seed) {
         bdy$`vparam.spec_seed_` <- "0"
     }
     bdy
+}
+
+##' @importFrom xml2 read_xml xml_find_all xml_contents
+parse_beast1_xml <- function(input_file) {
+    bst <- xml2::read_xml(x = input_file)
+
+    ## Get the number of partitions based on the number of elements
+    ## with siteModel
+    n_partitions <- length(xml2::xml_find_all(bst, ".//siteModel[@id]"))
+
+    ## Get length of sequences by calculating length of the first
+    ## sequence for each partitions
+    seq_info <- xml2::xml_contents(
+        xml2::xml_find_all(bst, ".//alignment/sequence[1]")
+    )
+    clean_seq <- gsub("\\s|(^<.+)", "", seq_info)
+    clean_seq <- clean_seq[nzchar(clean_seq)]
+    n_patterns <- sum(sapply(clean_seq, nchar))
+
+    list(n_partitions = n_partitions,
+         n_patterns = n_patterns)
 }
