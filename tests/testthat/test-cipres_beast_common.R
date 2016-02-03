@@ -13,7 +13,7 @@ test_that("beast check_partitions with 1 partition",
 )
 
 test_that("beast check partitions with 2 partitions", {
-    part <- beast_check_partitions(list(), 2)
+    part <- beast_check_partitions(list(), 2, beast2 = TRUE)
     expect_identical(part$`vparam.is_partitioned_`, "1")
     expect_identical(part$`vparam.nu_partitions_`, 2)
 })
