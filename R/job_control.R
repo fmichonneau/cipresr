@@ -24,7 +24,8 @@ cipres_list_jobs <- function(...) {
                `in_notebook` = in_notebook,
                `job_name` = job_name,
                `has_note` = has_note,
-               row.names = seq_along(titles))
+               row.names = seq_along(titles),
+               stringsAsFactors = FALSE)
 }
 
 
