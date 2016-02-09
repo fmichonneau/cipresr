@@ -25,9 +25,30 @@ cipres_submit_beast1 <- function(input_file,
     check_file(input_file)
 
     assertthat::assert_that(assertthat::is.count(max_runtime))
-
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(codon_partitioning))
+
+    bdy <- .cipres_submit_beast1(input_file = input_file,
+                                 beast_version = beast_version,
+                                 max_runtime = max_runtime,
+                                 codon_partitioning = codon_partitioning,
+                                 use_beagle = use_beagle,
+                                 use_seed = use_seed,
+                                 job_name = job_name,
+                                 get_email = get_email)
+
+    cipres_submit(bdy, tool = "BEAST_TG", job_name = job_name,
+                  note = note, ...)
+}
+
+.cipres_submit_beast1 <- function(input_file,
+                                  beast_version,
+                                  use_beagle,
+                                  max_runtime,
+                                  codon_partitioning,
+                                  use_seed,
+                                  job_name,
+                                  get_email) {
 
     bdy <- list(
         `input.infile_` = httr::upload_file(input_file),
@@ -48,10 +69,7 @@ cipres_submit_beast1 <- function(input_file,
     bdy <- beast_use_seed(bdy, use_seed)
     bdy <- add_meta_data(bdy, get_email, job_name)
 
-    bdy <- lapply(bdy, as.character)
-    bdy$tool <- "BEAST_TG"
-    res <- cipres_POST(body = bdy, ...)
-    cipres_process_results(res)
+    bdy
 }
 
 beast_check_partitions <- function(bdy, n_partitions, beast2) {
