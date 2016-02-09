@@ -90,8 +90,7 @@ cipres_delete_job <- function(handle, verbose = TRUE, ...) {
     if(identical(res, "")) {
         if (verbose) message("Job ", sQuote(handle), " deleted successfully.")
         return(invisible(TRUE))
-    }
-    else {
+    } else {
         warning("Something probably went wrong.")
         return(invisible(FALSE))
     }
