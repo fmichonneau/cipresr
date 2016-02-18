@@ -10,7 +10,8 @@ cipres_submit_beast1 <- function(input_file,
                                  codon_partitioning = FALSE,
                                  use_seed = NULL,
                                  job_name = NULL,
-                                 get_email = TRUE, ...) {
+                                 get_email = TRUE,
+                                 note = NULL, ...) {
 
     ## Documentation here: http://www.phylo.org/rest/beast_tg.html
 
@@ -24,7 +25,7 @@ cipres_submit_beast1 <- function(input_file,
     input_file <- normalizePath(input_file)
     check_file(input_file)
 
-    assertthat::assert_that(assertthat::is.count(max_runtime))
+    assertthat::assert_that(is_maxruntime(max_runtime))
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(codon_partitioning))
 

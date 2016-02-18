@@ -176,7 +176,7 @@ cipres_submit_raxml <- function(input_file,
     select_analysis <- match.arg(select_analysis)
     bdy$`vparam.select_analysis_` <- select_analysis
 
-    assertthat::assert_that(is.numeric(max_runtime), max_runtime <= 168)
+    assertthat::assert_that(is_maxruntime(max_runtime))
     bdy$`vparam.runtime_` <- max_runtime
 
     if (!is.null(CAT_categories)) {

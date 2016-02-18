@@ -75,6 +75,17 @@ check_file <- function(file) {
         stop(sQuote(file), " doesn't exist.")
 }
 
+##' @importFrom assertthat is.count
+is_maxruntime <- function(x) {
+    assertthat::is.count(x)
+    x <= 168
+}
+
+##' @importFrom assertthat on_failure
+assertthat::on_failure(is_maxruntime) <- function(call, env) {
+    paste0(sQuote("max_runtime"), " should be 168 or less. You entered: ", deparse(call$x))
+}
+
 cipres_process_results <- function(res) {
     handle <- xml2::xml_text(xml2::xml_find_all(res, ".//jobHandle"))
     stage <- xml2::xml_text(xml2::xml_find_all(res, ".//jobStage"))

@@ -12,8 +12,8 @@ test_that("generates list correctly", {
                                  use_seed = 12345,
                                  overwrite_logs = TRUE,
                                  job_name = "test job name",
-                                 get_email = TRUE,
-                                 note = "test note")
+                                 get_email = TRUE
+                                 )
     bdy <- lapply(bdy, as.character)
     expect_true(inherits(bdy$input.infile_, "form_file"))
     expect_identical(bdy$vparam.is_partitioned_, "1")

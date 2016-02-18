@@ -45,7 +45,7 @@ cipres_submit_beast2 <- function(input_file,
     n_patterns <- alg_info[["n_patterns"]]
     n_partitions <- alg_info[["n_partitions"]]
 
-    assertthat::assert_that(assertthat::is.count(max_runtime))
+    assertthat::assert_that(is_maxruntime(max_runtime))
     assertthat::assert_that(assertthat::is.count(n_patterns))
     assertthat::assert_that(assertthat::is.flag(use_beagle))
     assertthat::assert_that(assertthat::is.flag(overwrite_logs))
