@@ -19,13 +19,15 @@ cipres_list_jobs <- function(...) {
         dat <- cipres_get_notebook(x, "date_submitted")
         format(as.Date(dat), "%Y-%m-%d")
     }, character(1))
-    data.frame(`handle` = titles,
-               `date_submitted` = date_submitted,
-               `in_notebook` = in_notebook,
-               `job_name` = job_name,
-               `has_note` = has_note,
-               row.names = seq_along(titles),
-               stringsAsFactors = FALSE)
+    res <- data.frame(`handle` = titles,
+                      `date_submitted` = date_submitted,
+                      `in_notebook` = in_notebook,
+                      `job_name` = job_name,
+                      `has_note` = has_note,
+                      row.names = seq_along(titles),
+                      stringsAsFactors = FALSE)
+    attr(res, "urls") <- urls
+    res
 }
 
 
@@ -51,7 +53,6 @@ cipres_list_jobs <- function(...) {
 cipres_job_status <- function(handle, ...) {
 
     assertthat::assert_that(assertthat::is.string(handle))
-
     lst_jobs <- cipres_list_jobs(...)
     i_job <- match(handle, lst_jobs[["handle"]])
 
@@ -59,7 +60,7 @@ cipres_job_status <- function(handle, ...) {
         stop("Job handle not found.")
     }
 
-    res <- cipres_GET(full_url = lst_jobs[["url"]][i_job], ...)
+    res <- cipres_GET(full_url = attr(lst_jobs, "urls")[i_job], ...)
     cipres_process_results(res)
 }
 
