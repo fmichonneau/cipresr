@@ -19,14 +19,14 @@ cipres_check <- function(res) {
 cipres_results <- function(res) {
     cipres_check(res)
     if (identical(res[["headers"]][["content-type"]], "application/xml")) {
-        return(xml2::read_xml(httr::content(res, as = "text")))
+        return(xml2::read_xml(httr::content(res, encoding = "UTF-8", as = "text")))
     } else {
-        return(httr::content(res, as = "text"))
+        return(httr::content(res, encoding = "UTF-8", as = "text"))
     }
 }
 
 cipres_parse <- function(res) {
-    txt <- httr::content(res, as = "text")
+    txt <- httr::content(res, encoding = "UTF-8", as = "text")
     if (identical(txt, ""))
         stop("No output to parse", call. = FALSE)
 
